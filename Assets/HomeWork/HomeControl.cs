@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerControl : MonoBehaviour
+public class HomeControl : MonoBehaviour
 {
     public float movePower;
     public float jumpPower;
     public float maxSpeed;
-   // public LayerMask groundLayer;
+    public LayerMask layer;
 
     private SpriteRenderer sprite;
     private Rigidbody2D rigid;
@@ -25,25 +25,25 @@ public class PlayerControl : MonoBehaviour
     {
         Move();
     }
-   /* private void FixedUpdate()
+    private void FixedUpdate()
     {
         GroundCheck();
-    }*/
+    }
     public void Move()
     {
-        if(inputDir.x > 0 && rigid.velocity.x < maxSpeed)
+        if (inputDir.x > 0 && rigid.velocity.x < maxSpeed)
             rigid.AddForce(Vector2.right * inputDir * movePower, ForceMode2D.Force);
-        if(inputDir.x < 0 && rigid.velocity.x > -maxSpeed)
+        if (inputDir.x < 0 && rigid.velocity.x > -maxSpeed)
             rigid.AddForce(Vector2.right * inputDir * movePower, ForceMode2D.Force);
     }
 
     private void OnMove(InputValue value)
     {
         inputDir = value.Get<Vector2>();
-        animator.SetFloat("MoveSpeed",Mathf.Abs(inputDir.x));
-        if(inputDir.x < 0)
+        animator.SetFloat("MoveSpeed", Mathf.Abs(inputDir.x));
+        if (inputDir.x < 0)
             sprite.flipX = true;
-        else if(inputDir.x > 0)
+        else if (inputDir.x > 0)
             sprite.flipX = false;
     }
     public void Jump()
@@ -54,29 +54,17 @@ public class PlayerControl : MonoBehaviour
     {
         Jump();
     }
-
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void GroundCheck()
     {
-        animator.SetBool("Ground", true);
-    }
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        animator.SetBool("Ground", false);
-    }
-    /*private void GroundCheck()
-    {
-        RaycastHit2D hit=Physics2D.Raycast(transform.position, Vector2.down, 1.5f,groundLayer);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position,Vector2.down,1.3f,layer);
         
         if(hit.collider !=null)
         {
-            
             animator.SetBool("Ground", true);
-            Debug.DrawRay(transform.position, new Vector3(hit.point.x, hit.point.y, 0) - transform.position, Color.red);
         }
         else
         {
             animator.SetBool("Ground", false);
         }
-    }*/
-
+    }
 }
